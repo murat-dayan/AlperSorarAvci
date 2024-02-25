@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "900340484787",
+    "firebase_url": "https://alpersoraravci-default-rtdb.firebaseio.com",
+    "project_id": "alpersoraravci",
+    "storage_bucket": "alpersoraravci.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:900340484787:android:2d301a25020ee23a43bec6",
+        "android_client_info": {
+          "package_name": "com.example.alper_soraravci"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZHh0y88fzyMX_LCGwDHwT8ScAF7pR55I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
