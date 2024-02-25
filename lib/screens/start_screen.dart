@@ -48,7 +48,7 @@ class _StartPageState extends State<StartPage> {
                 GestureDetector(
                     onTap: () => Navigator.push(context,
                         MaterialPageRoute(builder: (context) => HomeScreen())),
-                    child: NextButton(buttonName: "Başlayalım")),
+                    child: NextButton(buttonName: "Başla")),
               ],
               SizedBox(
                 height: 10.0,
