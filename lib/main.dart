@@ -1,7 +1,9 @@
 
 
 import 'package:alper_soraravci/firebase_options.dart';
+import 'package:alper_soraravci/screens/sign_screen.dart';
 import 'package:alper_soraravci/screens/start_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import './screens/home_screen.dart';
@@ -19,14 +21,20 @@ Future<void> main() async{
   );
 }
 
+final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+bool isUserSigned(){
+  return _firebaseAuth.currentUser != null;
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return  MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: StartPage(),
+      home: isUserSigned() ? StartPage() : SignPage() ,
     );
   }
 }

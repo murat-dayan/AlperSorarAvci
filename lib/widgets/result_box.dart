@@ -32,19 +32,19 @@ class ResultBox extends StatelessWidget {
                   style: TextStyle(fontSize: 30.0, color: neutral),
                 ),
                 radius: 60.0,
-                backgroundColor: result == questionLength / 2
+                backgroundColor: result == (questionLength*10) / 2
                     ? Colors.yellow
-                    : result < questionLength / 2
+                    : result < (questionLength*10) / 2
                         ? inCorrect
                         : correct
             ),
             SizedBox(height: 20.0,),
             Text(
-              result == questionLength / 2
-                    ? 'Neredeyse yakındı'
-                    : result < questionLength / 2
-                        ? 'başarısız'
-                        : 'testi geçtiniz',
+              result == (questionLength*10) / 2
+                    ? 'eh idare eder'
+                    : result < (questionLength*10) / 2
+                        ? 'üzgünüm dostum sınıfta kaldın'
+                        : '55 milyon dolarını al gel',
               style: TextStyle(
                 color: neutral
               ),          
@@ -56,9 +56,10 @@ class ResultBox extends StatelessWidget {
               child: Text(
                 'Yeniden Başla',
                 style: TextStyle(
-                  color: Colors.blue,
+                  color: crema,
                   fontSize: 20.0,
-                  letterSpacing: 1.0
+                  letterSpacing: 1.0,
+                  decoration: TextDecoration.underline
                 ),
               ),
             )

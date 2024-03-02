@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:alper_soraravci/widgets/option_card.dart';
 import 'package:alper_soraravci/widgets/question_widget.dart';
 import 'package:alper_soraravci/widgets/result_box.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '../widgets/next_button.dart';
 import '../models/question_model.dart';
@@ -16,6 +17,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+
   Future<void> addQuestion(Question question) async {
     final databaseReference = FirebaseDatabase.instance.ref();
 
@@ -153,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               body: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 50.0),
                 child: Column(
                   children: [
                     QuestionWidget(
