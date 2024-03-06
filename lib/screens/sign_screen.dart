@@ -17,7 +17,6 @@ class SignPage extends StatefulWidget {
 }
 
 class _SignPageState extends State<SignPage> {
-  
   _signInWithGoogle() async {
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -31,8 +30,9 @@ class _SignPageState extends State<SignPage> {
             await googleSignInAccount.authentication;
 
         final AuthCredential credential = GoogleAuthProvider.credential(
-            idToken: googleSignInAuthentication.idToken,
-            accessToken: googleSignInAuthentication.accessToken);
+          idToken: googleSignInAuthentication.idToken,
+          accessToken: googleSignInAuthentication.accessToken,
+        );
 
         await _firebaseAuth.signInWithCredential(credential);
 
@@ -48,6 +48,7 @@ class _SignPageState extends State<SignPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundAppColor,
+      resizeToAvoidBottomInset: false,
       body: Container(
         color: crema,
         child: Column(
@@ -55,7 +56,7 @@ class _SignPageState extends State<SignPage> {
             Lottie.asset('assets/animations/sign_anim.json',
                 fit: BoxFit.contain, repeat: true),
             Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text("İstikbal Göklerdedir",
                     style: GoogleFonts.anton(
@@ -64,8 +65,7 @@ class _SignPageState extends State<SignPage> {
                     style: GoogleFonts.shadowsIntoLight(
                         textStyle: TextStyle(fontSize: 16.0))),
                 Lottie.asset('assets/animations/arrow_bottom.json',
-                fit: BoxFit.contain, repeat: true, width: 100, height: 200),        
-              
+                    fit: BoxFit.contain, repeat: true, width: 100, height: 100),
                 GestureDetector(
                   onTap: () {
                     _signInWithGoogle();

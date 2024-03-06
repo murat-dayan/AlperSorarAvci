@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:alper_soraravci/widgets/option_card.dart';
 import 'package:alper_soraravci/widgets/question_widget.dart';
 import 'package:alper_soraravci/widgets/result_box.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '../widgets/next_button.dart';
@@ -17,7 +18,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  void saveScore(int score) async {
+    final user = _auth.currentUser;
+
+    final docRef =
+        FirebaseFirestore.instance.collection('users').doc(user!.uid);
+
+    int currentScore = (await docRef.get()).data()!['score'];
+
+    if (score > currentScore) {
+      await docRef.set({'score': score}, SetOptions(merge: true));
+    }
+  }
 
   Future<void> addQuestion(Question question) async {
     final databaseReference = FirebaseDatabase.instance.ref();
@@ -51,7 +65,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
         newQuestions.add(newQuestion);
       });
-
     } catch (e) {
       print("Hata: $e");
       // Hata durumunda yapılacak işlemler
@@ -82,6 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 questionLength: questionLength,
                 startOverPress: startOver,
               ));
+      saveScore(score);
     } else {
       if (isPressed) {
         setState(() {
@@ -104,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return;
     } else {
       if (value) {
-        score = score +10;
+        score = score + 10;
       }
       setState(() {
         isPressed = true;
@@ -140,9 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
               appBar: AppBar(
                 backgroundColor: backgroundAppColor,
                 toolbarHeight: 60.0,
-                iconTheme: IconThemeData(
-                  color: neutral
-                ),
+                iconTheme: IconThemeData(color: neutral),
                 shadowColor: Colors.transparent,
                 actions: [
                   Padding(
@@ -156,7 +168,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               body: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 50.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 10.0, vertical: 50.0),
                 child: Column(
                   children: [
                     QuestionWidget(
