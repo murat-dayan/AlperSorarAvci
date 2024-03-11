@@ -167,14 +167,14 @@ class _StartPageState extends State<StartPage> {
                             iconColor: backgroundAppColor,
                           )),
                       SizedBox(
-                        height: 20.0,
+                        height: 21.0,
                       ),
                       GestureDetector(
                         onTap: () async {
                           _signOut();
                         },
                         child: Text(
-                          'Çıkış Yap',
+                          'Çıkış',
                           style: TextStyle(
                               color: darkBlue,
                               decoration: TextDecoration.underline,
