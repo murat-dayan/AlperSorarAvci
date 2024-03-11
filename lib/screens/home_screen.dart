@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:alper_soraravci/widgets/option_card.dart';
 import 'package:alper_soraravci/widgets/question_widget.dart';
 import 'package:alper_soraravci/widgets/result_box.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -19,6 +21,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final audioPlayer = AudioPlayer();
 
   void saveScore(int score) async {
     final user = _auth.currentUser;
@@ -46,20 +49,40 @@ class _HomeScreenState extends State<HomeScreen> {
     await databaseReference.child('questions').push().set(questionData);
   }
 
-  Future<List<Question>> getAllQuestions() async {
+  Future<List<Question>> getRandomQuestions() async {
     final databaseReference = FirebaseDatabase.instance.ref();
 
+    final query = databaseReference.child('questions');
+
     // Verileri çek
-    final snapshot = await databaseReference.child('questions').once();
+    final snapshot = await query.once();
     final values = snapshot.snapshot.value as Map<Object?, Object?>;
 
     List<Question> newQuestions = [];
     try {
       Map<String?, dynamic> data = values.cast<String?, dynamic>();
 
-      data.forEach((key, value) {
+      // Alınan verilerin uzunluğu
+      int dataLength = data.length;
+
+      // Rasgele indisler için bir liste oluştur
+      List<int> randomIndices = [];
+
+      // Veri uzunluğu kadar rasgele indisler oluştur
+      while (randomIndices.length < min(dataLength, 10)) {
+        int randomIndex = Random().nextInt(dataLength);
+        if (!randomIndices.contains(randomIndex)) {
+          randomIndices.add(randomIndex);
+        }
+      }
+
+      // Rasgele indislerle veri seç
+      randomIndices.forEach((index) {
+        var key = data.keys.elementAt(index);
+        var value = data[key];
+
         var newQuestion = Question(
-            id: key!!,
+            id: key!,
             title: value['title'],
             options: Map.castFrom(value['options']));
 
@@ -77,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _questions = getAllQuestions();
+    _questions = getRandomQuestions();
   }
 
   int index = 0;
@@ -137,6 +160,11 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.pop(context);
   }
 
+  Future<void> playCorrectChoiceSound() async {
+    String audioPath = "sounds/correct_choice.mp3";
+    await audioPlayer.play(AssetSource(audioPath));
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -186,8 +214,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         i < extractedData[index].options.length;
                         i++)
                       GestureDetector(
-                        onTap: () => checkAnswerAndUpdate(
-                            extractedData[index].options.values.toList()[i]),
+                        onTap: () => {
+                          checkAnswerAndUpdate(
+                              extractedData[index].options.values.toList()[i]),
+                          if (isPressed &&
+                              extractedData[index].options.values.toList()[i] ==
+                                  true)
+                            {playCorrectChoiceSound()}
+                        },
                         child: OptionCard(
                             option:
                                 extractedData[index].options.keys.toList()[i],
