@@ -186,7 +186,7 @@ class _StartPageState extends State<StartPage> {
                   )
                 ],
                 SizedBox(
-                  height: 15.0,
+                  height: 10.0,
                 ),
               ],
             ],
