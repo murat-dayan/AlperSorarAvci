@@ -1,29 +1,31 @@
-
-
 import 'package:alper_soraravci/firebase_options.dart';
 import 'package:alper_soraravci/screens/sign_screen.dart';
 import 'package:alper_soraravci/screens/start_screen.dart';
+import 'package:alper_soraravci/utils/push_notifications.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import './screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
-Future<void> main() async{
+Future _firebaseBackgroundMessage(RemoteMessage message) async {
+  if (message.notification != null) {
+    print("some notification received");
+  }
+}
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform
-  );
-
-  runApp(
-    const MyApp()
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  PushNotifications.init();
+  FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundMessage);
+  runApp(const MyApp());
 }
 
 final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-bool isUserSigned(){
+bool isUserSigned() {
   return _firebaseAuth.currentUser != null;
 }
 
@@ -32,9 +34,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: isUserSigned() ? StartPage() : SignPage() ,
+      home: isUserSigned() ? StartPage() : SignPage(),
     );
   }
 }
